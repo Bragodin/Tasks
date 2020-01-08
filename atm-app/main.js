@@ -11,29 +11,20 @@ class EventEmitter {
   }
 }
 
-class Atm extends EventEmitter {
+class Atm {
   constructor(id){
-    super();
+    this.liveTime = 0;
     this.time = Math.random() * (5000 - 2000) + 2000;
+    this.timeForFixAtm = Math.random() * (10000 - 5000) + 5000;
     this.state = true;
     this.atmId = id;
     this.personInAtm = null;
-    this.checkState();
   }
   changeState(){
     this.state = false;
     setTimeout(() => {
       this.state = true;
     }, this.time);
-  }
-  checkState() {
-
-    setTimeout(()=> {
-      if(this.state === true){
-        this.emit('freeAtm', this.atmId);
-      }
-      return this.checkState();
-    }, 0);
   }
 }
 class Person {
@@ -45,6 +36,7 @@ class Person {
 class Model extends EventEmitter {
   constructor(){
       super();
+      this.prevPersonId = 1;
       this.turn = [];
       this.atmsArray = [];
       this.addPersonToTurn();
@@ -56,17 +48,15 @@ class Model extends EventEmitter {
     setTimeout(() => {
       if(this.turn.length < 15){
         if(this.turn.length !== 0){
-          let personId = (this.turn[this.turn.length - 1].personId + 1);
-          this.turn.push(new Person(personId));
+          this.turn.push(new Person(this.prevPersonId++));
           this.emit('personAdded');
-        } else {
-          let personId = 1;
-          this.turn.push(new Person(personId));
+        } else { 
+          this.turn.push(new Person(this.prevPersonId++));
           this.emit('personAdded');
         }
       } 
       return this.addPersonToTurn();
-    }, 500);
+    }, Math.random() * (1000 - 500) + 500); // for clarity, the speed is increased (require - Math.random() * (3000 - 1000) + 1000) )
   }
   removePersonFromTurn(){
       this.turn.shift(this.turn[0]);
@@ -96,7 +86,6 @@ class View extends EventEmitter {
     this.divForAtm.append(atm);
   }
   removePersonFromTurn(){
-      // let firstElementOfTurn = document.getElementsByClassName('ul__li_person');
       let li = this.ul.firstElementChild;
       this.ul.removeChild(li);
   }
@@ -110,6 +99,17 @@ class View extends EventEmitter {
       atms[atmNumber].removeChild(li);
     }, time);
   }
+  crashAtm(atmNumber){
+    let atms = document.getElementsByClassName('atm');
+    atms[atmNumber].innerHTML = `<h3>Broke atm</h3>`;
+    atms[atmNumber].style.background = "red";
+  }
+  fixAtm(atmNumber){
+    let atms = document.getElementsByClassName('atm');
+    let h3 = atms[atmNumber].getElementsByTagName('h3')[0];
+    atms[atmNumber].removeChild(h3);
+    atms[atmNumber].style.background = "brown";
+  }
 }
 //controller
 class Controller extends EventEmitter {
@@ -120,8 +120,8 @@ class Controller extends EventEmitter {
       this.createAtm();
       this.createPerson();
       this.checkAtm();
-      this.checkAtm();
   }
+
   createAtm(){
     let j = 0;
     while(j < 3){
@@ -140,21 +140,34 @@ class Controller extends EventEmitter {
         freeAtmIndex = el.atmId;
         return el.state === true;
       });
-      if(freeAtm && this.model.turn.length > 3){
-        this.model.atmsArray[freeAtmIndex].changeState();
-        this.view.removePersonFromTurn();
-        this.view.addAndRemovePersonInAtm(freeAtmIndex, this.model.turn[0].personId, freeAtm.time);
-        this.model.removePersonFromTurn();
+      if(freeAtm && this.model.turn.length > 0){
+        if(freeAtm.liveTime === 10){
+          freeAtm.state = false;
+          this.view.crashAtm(freeAtm.atmId);
+          setTimeout(() => {
+            freeAtm.liveTime = 0;
+            freeAtm.state = true;
+            this.view.fixAtm(freeAtm.atmId);
+          }, freeAtm.timeForFixAtm);
+        } else {
+          this.model.atmsArray[freeAtmIndex].changeState();
+          this.view.removePersonFromTurn();
+          this.view.addAndRemovePersonInAtm(freeAtmIndex, this.model.turn[0].personId, freeAtm.time);
+          this.model.removePersonFromTurn();
+          freeAtm.liveTime++;
+        }
       }
     }, 0);
   }
 }
 
-function stop(){
+function debug(){
   debugger;
 }
 
 function start(){
   new Controller(new Model(), new View());
 }
+
+
 

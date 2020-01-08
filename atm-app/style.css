@@ -11,8 +11,8 @@
     padding-top: 17px;
 }
 .ul__turn{
-    margin-left: 42%;
     margin-top: 100px;
+    margin-left: 45%;
 }
 .div-for-atm{
     text-align: center;
@@ -34,7 +34,7 @@
     border: 1px solid blueviolet;
     color: blueviolet;
     border-radius: 3px;
-    margin-right: 20px;
+    text-align: center;
     cursor: pointer;
 }
 .button:hover {
