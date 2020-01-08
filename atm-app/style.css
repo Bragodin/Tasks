@@ -7,10 +7,11 @@
     margin-top: 10px;
 }
 .ul__li_person h3 {
-    margin-left: 25px;
+    text-align: center;
+    padding-top: 17px;
 }
 .ul__turn{
-    margin-left: 45%;
+    margin-left: 42%;
     margin-top: 100px;
 }
 .div-for-atm{
@@ -22,6 +23,7 @@
     background-color: brown;
     width: 90px;
     height: 70px;
+    padding-left: 30px;
 }
 .buttons {
     text-align: center;

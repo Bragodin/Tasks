@@ -27,6 +27,7 @@ class Atm extends EventEmitter {
     }, this.time);
   }
   checkState() {
+
     setTimeout(()=> {
       if(this.state === true){
         this.emit('freeAtm', this.atmId);
@@ -35,7 +36,6 @@ class Atm extends EventEmitter {
     }, 0);
   }
 }
-
 class Person {
   constructor(id){
     this.personId = id;
@@ -72,7 +72,6 @@ class Model extends EventEmitter {
       this.turn.shift(this.turn[0]);
   }
 }
-
 class View extends EventEmitter {
   constructor(){
       super();
@@ -97,20 +96,18 @@ class View extends EventEmitter {
     this.divForAtm.append(atm);
   }
   removePersonFromTurn(){
-      let firstElementOfTurn = document.getElementsByClassName('ul__li_person');
-      console.log(firstElementOfTurn);
-
+      // let firstElementOfTurn = document.getElementsByClassName('ul__li_person');
       let li = this.ul.firstElementChild;
       this.ul.removeChild(li);
   }
-  addPersonToAtm(atmNumber, personId, time){
+  addAndRemovePersonInAtm(atmNumber, personId, time){
     let atms = document.getElementsByClassName('atm');
     let li = document.createElement('div');
     li.className = "ul__li_person";
     li.innerHTML = `<h3>${personId}</h3>`;
     atms[atmNumber].append(li);
     setTimeout(() => {
-      atms[atmNumber].removeChild(li);////  CHANGE TIME
+      atms[atmNumber].removeChild(li);
     }, time);
   }
 }
@@ -143,15 +140,13 @@ class Controller extends EventEmitter {
         freeAtmIndex = el.atmId;
         return el.state === true;
       });
-      if(freeAtm && this.model.turn.length > 0){
+      if(freeAtm && this.model.turn.length > 3){
         this.model.atmsArray[freeAtmIndex].changeState();
         this.view.removePersonFromTurn();
-
-        this.view.addPersonToAtm(freeAtmIndex, this.model.turn[0].personId, freeAtm.time);
+        this.view.addAndRemovePersonInAtm(freeAtmIndex, this.model.turn[0].personId, freeAtm.time);
         this.model.removePersonFromTurn();
       }
     }, 0);
-
   }
 }
 
