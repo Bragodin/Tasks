@@ -41,7 +41,9 @@ class Model {
         {
             question: ' Понятия «чувство» и «восхищение» находятся в отношении',
             answerOptions: ['противоречия', 'соподчинения', 'подчинения', 'противоположности', 'пересечения'],
-            correctAnswer: 2,
+            correctAnswer: () => {
+                this.answerOptions.indexOf('противоположности')
+            },
             level: 3
         },
         {
@@ -56,6 +58,13 @@ class Model {
     randomizeTasks(){
         this.questions.sort(function(){
             return Math.random() - 0.5;
+        });
+    }
+    randomizeOptions(){
+        this.questions.forEach(elem => {
+            elem.answerOptions.sort(function(){
+                return Math.random() - 0.5;
+            });
         });
     }
 }
@@ -145,6 +154,7 @@ class Controler {
         this.trueAnswer = 0;
         this.stateOfQuestions = false;
         this.model.randomizeTasks();
+        this.model.randomizeOptions();
         this.view.removeQuestions();
     }
     checkAnswer(){
