@@ -50,7 +50,13 @@ class Model {
             correctAnswer: 4,
             level: 2
         },
-        ]
+        ];
+        this.randomizeTasks();
+    }
+    randomizeTasks(){
+        this.questions.sort(function(){
+            return Math.random() - 0.5;
+        });
     }
 }
 
@@ -138,16 +144,20 @@ class Controler {
         this.answeredQuestionsNumber = 0;
         this.trueAnswer = 0;
         this.stateOfQuestions = false;
+        this.model.randomizeTasks();
         this.view.removeQuestions();
     }
     checkAnswer(){
         let answers = document.getElementsByClassName('questions-box__question_answer_radiobutton');
         for(let i = 0; i < answers.length; i++){
             answers[i].addEventListener('click', () => {
-                if(this.model.questions[answers[i].id[answers[i].id.length - 2]].correctAnswer === +answers[i].id[answers[i].id.length - 1]){
+                let numberOfAnswerInBlock = +answers[i].id[answers[i].id.length - 1];
+                let numberOfQuestion = this.model.questions[answers[i].id[answers[i].id.length - 2]];
+                let answerBlockNumber = +answers[i].id[answers[i].id.length - 2];
+                if(numberOfQuestion.correctAnswer === numberOfAnswerInBlock){
                     this.answeredQuestionsNumber++;
                     this.trueAnswer++;
-                    this.view.doDesible(+answers[i].id[answers[i].id.length - 2], +answers[i].id[answers[i].id.length - 1], 'green');
+                    this.view.doDesible(answerBlockNumber, numberOfAnswerInBlock, 'green');
                     setTimeout(() => {
                         if(this.answeredQuestionsNumber === this.correctQuestions.length){
                             this.finish();
@@ -155,7 +165,7 @@ class Controler {
                     }, 0);
                 } else { 
                     this.answeredQuestionsNumber++;
-                    this.view.doDesible(+answers[i].id[answers[i].id.length - 2], +answers[i].id[answers[i].id.length - 1], 'red');
+                    this.view.doDesible(answerBlockNumber, numberOfAnswerInBlock, 'red');
                     setTimeout(() => {
                         if(this.answeredQuestionsNumber === this.correctQuestions.length){
                             this.finish();
