@@ -1,55 +1,45 @@
-// class User {
-//     constructor(name, surname, level){
-//         this.name = name;
-//         this.surname = surname;
-//         this.level = level
-//     }
-// }
-
 class Model {
     constructor(){
         this.questions = [{
             question: 'Число под знаком арксинуса может быть ...',
             answerOptions: ['любым', 'положительным', 'отрицательным', 'в пределах от -1 до 1 включая эти числа'],
-            correctAnswer: 3,
+            correctAnswer: function(){return this.answerOptions.indexOf('в пределах от -1 до 1 включая эти числа')},
             level: 1
         }, 
         {
             question: 'Простое суждение «Некоторые простые числа не являются четными» является',
             answerOptions: ['общеотрицательным', 'общеутвердительным', 'единичным', 'частноотрицательным', 'частноутвердительным'],
-            correctAnswer: 3,
+            correctAnswer: function(){return this.answerOptions.indexOf('общеутвердительным')},
             level: 1
         },
         {
             question: 'Понятия «литературный жанр» и «роман», «пьеса» находятся в отношении',
             answerOptions: ['противоречия', 'подчинения', 'пересечения', 'соподчинения', 'противоположности'],
-            correctAnswer: 3,
+            correctAnswer: function(){return this.answerOptions.indexOf('соподчинения')},
             level: 1
         },
         {
             question: 'Понятия «чувство» и «нежность» находятся в отношении',
             answerOptions: ['соподчинения', 'пересечения', 'подчинения', 'противоположности'],
-            correctAnswer: 2,
+            correctAnswer: function(){return this.answerOptions.indexOf('противоположности')},
             level: 2
         },
         {
             question: ' Понятия «юрист» и «адвокат» находятся в отношении',
             answerOptions: ['противоречия', 'соподчинения', 'подчинения', 'противоположности', 'пересечения'],
-            correctAnswer: 2,
+            correctAnswer: function(){return this.answerOptions.indexOf('противоположности')},
             level: 2
         },
         {
             question: ' Понятия «чувство» и «восхищение» находятся в отношении',
             answerOptions: ['противоречия', 'соподчинения', 'подчинения', 'противоположности', 'пересечения'],
-            correctAnswer: () => {
-                this.answerOptions.indexOf('противоположности')
-            },
+            correctAnswer: function(){return this.answerOptions.indexOf('противоположности')},
             level: 3
         },
         {
             question: 'Понятия «спортивная игра» и «теннис» находятся в отношении',
             answerOptions: ['противоречия', 'соподчинения', 'подчинения', 'противоположности', 'пересечения'],
-            correctAnswer: 4,
+            correctAnswer: function(){return this.answerOptions.indexOf('противоположности')},
             level: 2
         },
         ];
@@ -65,6 +55,9 @@ class Model {
             elem.answerOptions.sort(function(){
                 return Math.random() - 0.5;
             });
+
+            // -------------------------
+            elem.correctAnswer();
         });
     }
 }
@@ -154,7 +147,8 @@ class Controler {
         this.trueAnswer = 0;
         this.stateOfQuestions = false;
         this.model.randomizeTasks();
-        this.model.randomizeOptions();
+
+        // this.model.randomizeOptions();
         this.view.removeQuestions();
     }
     checkAnswer(){
@@ -164,7 +158,9 @@ class Controler {
                 let numberOfAnswerInBlock = +answers[i].id[answers[i].id.length - 1];
                 let numberOfQuestion = this.model.questions[answers[i].id[answers[i].id.length - 2]];
                 let answerBlockNumber = +answers[i].id[answers[i].id.length - 2];
-                if(numberOfQuestion.correctAnswer === numberOfAnswerInBlock){
+                
+                console.log(numberOfQuestion.correctAnswer());
+                if(numberOfQuestion.correctAnswer() === numberOfAnswerInBlock){
                     this.answeredQuestionsNumber++;
                     this.trueAnswer++;
                     this.view.doDesible(answerBlockNumber, numberOfAnswerInBlock, 'green');
