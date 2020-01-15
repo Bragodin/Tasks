@@ -28,7 +28,9 @@ class UserService {
             './src/users.json'
         );
         this.arrUsers.push(body);
-        fs.writeFile(myFile, JSON.stringify(this.arrUsers) , () => {});
+        fs.writeFile(myFile, JSON.stringify(this.arrUsers) , (err) => {
+            console.log(err);
+        });
         return await this.arrUsers;
     }
     updateUser = async (id, body) => {
@@ -41,7 +43,9 @@ class UserService {
                 this.arrUsers[i] = body;
             } 
         });
-        fs.writeFile(myFile, JSON.stringify(this.arrUsers) , () => {});
+        fs.writeFile(myFile, JSON.stringify(this.arrUsers) ,(err) => {
+            console.log(err);
+        });
         return await this.arrUsers;
     }
     deleteUser = async function(req){
@@ -53,15 +57,10 @@ class UserService {
                 this.arrUsers.splice(i, 1);
             }
         });
-        fs.writeFile(myFile, JSON.stringify(this.arrUsers), (err, data) => {
-            if(err){
-                console.log('error');
-            } else {
-                console.log('ok');
-            }
+        fs.writeFile(myFile, JSON.stringify(this.arrUsers), (err) => {
+            console.log(err);
         });
         return await this.arrUsers;
     }
 }
-
 module.exports = UserService;

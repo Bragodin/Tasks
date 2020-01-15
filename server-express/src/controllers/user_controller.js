@@ -1,6 +1,5 @@
 const UserService = require('../services/user-service');
 const user_service = new UserService();
-
 class UserController {
     constructor(){}
     addUser = async (req, res) => {
@@ -33,7 +32,7 @@ class UserController {
             const result = await user_service.getUsers();
             res.send(result);
         } catch (e) {
-            console.log('error ! !');
+            res.status(400).send({error:e.message});
         }
     }
     getUserById = async (req, res) => {
@@ -41,7 +40,7 @@ class UserController {
             const result = await user_service.getUserById(req);
             res.send(result);
         } catch (e) {
-            console.log('error ! !');
+            res.status(400).send({error:e.message});
         }
     }
 }
