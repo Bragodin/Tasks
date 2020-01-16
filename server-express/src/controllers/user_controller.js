@@ -5,7 +5,6 @@ class UserController {
     addUser = async (req, res) => {
         try {
             const result = await user_service.addUser(req.body);
-            console.log(req.body);
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send({error:e.message});
@@ -13,6 +12,7 @@ class UserController {
     }
     deleteUser = async (req, res) => {
         try {
+            console.log(req)
             const result = await user_service.deleteUser(req);
             res.status(201).send(result);
         } catch (e) {
@@ -21,7 +21,7 @@ class UserController {
     }
     updateUser = async (req, res) => {
         try {
-            const result = await user_service.updateUser(+req.params.id, req.body);
+            const result = await user_service.updateUser(req.params.id, req.body);
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send({error:e.message});
