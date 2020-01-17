@@ -1,5 +1,5 @@
 const User = require('../models/user');
-
+const Pet = require('../models/pet');
 class UserService {
     constructor(){
         this.getUsers();
@@ -13,6 +13,13 @@ class UserService {
         try {
             return await User.findById(req.params.id)
         } catch(e){
+            console.log(e);
+        }
+    }
+    getUserPetsById = async (req) => {
+        try {
+            return await Pet.find({ownerId: req.params.id}).populate('ownerId');
+        } catch(e) {
             console.log(e);
         }
     }
@@ -33,9 +40,8 @@ class UserService {
         }
     }
     deleteUser = async (req) => {
-
         try {
-            return await User.findById(req.params.id).remove();
+            return await User.findByIdAndDelete(req.params.id);
         } catch(e){
             console.log(e);
         }

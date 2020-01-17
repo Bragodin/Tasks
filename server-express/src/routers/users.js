@@ -9,6 +9,7 @@ router.get('/users/:id', user_controller.getUserById);
 router.put('/users/:id', user_controller.updateUser);
 router.delete('/users/:id', user_controller.deleteUser);
 
+router.get('/users/:id/pets', user_controller.getUserPetsById);
 
 module.exports = router;
 

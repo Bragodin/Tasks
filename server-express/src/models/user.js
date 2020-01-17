@@ -8,7 +8,7 @@ const userScheme = new mongoose.Schema({
     surname: {
         type: String,
         required: true
-    },
+    }
 });
 
 const User = mongoose.model("User", userScheme);
