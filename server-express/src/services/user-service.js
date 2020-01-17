@@ -1,5 +1,6 @@
 const User = require('../models/user');
-const Pet = require('../models/pet');
+const mongoose = require('mongoose');
+
 class UserService {
     constructor(){
         this.getUsers();
@@ -18,7 +19,19 @@ class UserService {
     }
     getUserPetsById = async (req) => {
         try {
-            return await Pet.find({ownerId: req.params.id}).populate('ownerId');
+            return await User.aggregate([
+                {
+                $lookup: {
+                    from: "pets",
+                    localField: '_id' ,
+                    foreignField: "ownerId",
+                    as: "pets"
+                 }
+                },
+                {
+                    $match: {_id: mongoose.Types.ObjectId(req.params.id)}
+                }
+            ]);
         } catch(e) {
             console.log(e);
         }
