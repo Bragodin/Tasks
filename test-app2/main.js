@@ -5,15 +5,15 @@ const questions = [{
     level: 1
 }, 
 {
-    question: 'Простое суждение «Некоторые простые числа не являются четными» является',
-    answerOptions: ['общеотрицательным', 'общеутвердительным', 'единичным', 'частноотрицательным', 'частноутвердительным'],
-    correctAnswer: function(){return this.answerOptions.indexOf('общеутвердительным')},
+    question: 'Мексиканский курорт Акапулько всемирно известен. Своей популярностью он во многом обязан местному климату, как нельзя лучше подходящему для отдыха. Догадавшись, что в переводе с языка ацтеков означает слово "акапулько", назовите знаменитого путешественника, побывавшего, помимо прочих интересных мест, и в городе с аналогичным названием.',
+    answerOptions: ['Знайка', 'Незнайка', 'Опознайка', 'Опоздайка'],
+    correctAnswer: function(){return this.answerOptions.indexOf('Незнайка')},
     level: 1
 },
 {
-    question: 'Понятия «литературный жанр» и «роман», «пьеса» находятся в отношении',
-    answerOptions: ['противоречия', 'подчинения', 'пересечения', 'соподчинения', 'противоположности'],
-    correctAnswer: function(){return this.answerOptions.indexOf('соподчинения')},
+    question: 'Что измеряют спидометром?',
+    answerOptions: ['Давление', 'Скорость', 'Шум', 'Температура', 'Стрес'],
+    correctAnswer: function(){return this.answerOptions.indexOf('Скорость')},
     level: 1
 },
 {
@@ -29,15 +29,27 @@ const questions = [{
     level: 2
 },
 {
-    question: ' Понятия «чувство» и «восхищение» находятся в отношении',
-    answerOptions: ['противоречия', 'соподчинения', 'подчинения', 'противоположности', 'пересечения'],
-    correctAnswer: function(){return this.answerOptions.indexOf('противоположности')},
+    question: 'Радикально-авангардное объединение художников начала прошлого века, отколовшееся от "Бубнового валета", носило необычное название из двух слов, обозначающее предмет, который однажды был подарен законному владельцу. Как называлось это объединение?',
+    answerOptions: ['Дубовый дом', 'Мандарин', 'Макасиновый хвост', 'Ослиный хвост', 'Кленовый сироп'],
+    correctAnswer: function(){return this.answerOptions.indexOf('Ослиный хвост')},
     level: 3
 },
 {
-    question: 'Понятия «спортивная игра» и «теннис» находятся в отношении',
-    answerOptions: ['противоречия', 'соподчинения', 'подчинения', 'противоположности', 'пересечения'],
-    correctAnswer: function(){return this.answerOptions.indexOf('противоположности')},
+    question: 'Английский ученый-психолог Дэвид Льюис утверждает, что это безопасно лишь для женщин, тогда как для мужчин может стать источником опасных болезней. Проведенные исследования показали, что лишь у четверти женщин наблюдались какие-либо незначительные отклонения, например, сердцебиение. Мужчины же, наоборот, крайне отрицательно отреагировали на это: у них участился пульс, стала проявляться аритмия, резко подскочило кровяное давление. Назовите это английским словом, которое относительно недавно проникло и в русский язык.',
+    answerOptions: ['Топинг', 'Шопинг', 'Допинг', 'Стопинг', 'Допинг'],
+    correctAnswer: function(){return this.answerOptions.indexOf('Шопинг')},
+    level: 3
+},
+{
+    question: 'Многие не верят в ее существование. Однако Кант считал, что с нее начинается любое человеческое знание. А еще говорят, что она подводит только тех, у кого она есть. Назовите ее.',
+    answerOptions: ['Логика', 'Знание', 'Сон', 'Видение', 'Интуиция'],
+    correctAnswer: function(){return this.answerOptions.indexOf('Интуиция')},
+    level: 3
+},
+{
+    question: 'Один литературный персонаж, гуляя по зоопарку и проникшись сочувствием к запертым в клетках животным, решил, что некому слову очень бы не помешала приставка "не". Что это за слово?',
+    answerOptions: ['Вольер', 'Энштейн', 'Василий', 'Кант', 'Гаус'],
+    correctAnswer: function(){return this.answerOptions.indexOf('Вольер')},
     level: 2
 },
 ];
@@ -58,7 +70,6 @@ class Model {
 class View {
     constructor(){
         this.mainBlock = document.getElementById('main');
-
     }
     createStartPage(){
         const nameLabel = document.createElement('label');
@@ -68,8 +79,8 @@ class View {
         const levelsSelect = document.createElement('select');
         const sizeOfLevels = 3;
         const startButton = document.createElement('button');
-        startButton.id = 'startButton';
 
+        startButton.id = 'startButton';
         nameInput.id = 'name';
         surnameInput.id = 'surname';
         levelsSelect.id = 'select';
@@ -94,6 +105,7 @@ class View {
         }
     }
     createQuestion(questionOptions){
+        console.log(questionOptions);
         let question = document.createElement('h4');
         question.innerHTML = questionOptions.question;
         this.mainBlock.append(question);
@@ -129,12 +141,13 @@ class Controler {
             return false;
         }
     }
-
     init(){
         this.view.createStartPage();
         const startButton = document.getElementById('startButton'); 
         startButton.addEventListener('click', () => {
             if(this.validation()){
+                this.model.rightAnswer = 0;
+                this.numberOfQuestion = 0;
                 this.view.clear();
                 this.model.filerQuestions(+this.level);
                 this.view.createQuestion(this.model.activeQuestions[this.numberOfQuestion]);
@@ -146,7 +159,6 @@ class Controler {
     }
     checkAnswer(){
         let answerButtons = document.getElementsByClassName('answer-buttons');
-        console.log(answerButtons)
         for(let i = 0; i < answerButtons.length; i++){
             answerButtons[i].addEventListener('click', () => {
                 if(this.model.activeQuestions[this.numberOfQuestion].correctAnswer() === i && this.model.activeQuestions[this.numberOfQuestion]){
@@ -172,7 +184,6 @@ class Controler {
             }, 0);
         }
     }
-
  } 
 
 const app = new Controler(new Model(questions), new View);
