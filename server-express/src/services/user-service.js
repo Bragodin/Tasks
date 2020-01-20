@@ -10,10 +10,32 @@ class UserService {
     getUsers = async () => {
         return await User.find({});
     }
+    getUserByName = async (userName) => {
+        return await User.find({name: userName});
+    }
     getUserById = async function(req) {
         try {
-            return await User.findById(req.params.id)
+            return await User.findById(req.params.id);
         } catch(e){
+            console.log(e);
+        }
+    }
+    getPetsForUserByName = async (req) => {
+        try {
+            return await User.aggregate([
+                {
+                $lookup: {
+                    from: "pets",
+                    localField: '_id' ,
+                    foreignField: "ownerId",
+                    as: "pets"
+                }
+                },
+                {
+                    $match: {name: req.params.name}
+                }
+            ]);
+        } catch (e) {
             console.log(e);
         }
     }

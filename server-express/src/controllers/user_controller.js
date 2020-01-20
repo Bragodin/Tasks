@@ -10,11 +10,27 @@ class UserController {
             res.status(400).send({error:e.message});
         }
     }
+    getUserByName = async (req, res) => {
+        try {
+            const result = await user_service.getUserByName(req.params.name);
+            res.status(201).send(result);
+        } catch(e) {
+            res.status(400).send({error:e.message});
+        }
+    }
     getUserPetsById = async (req, res) => {
         try {
             const result = await user_service.getUserPetsById(req);
             res.status(201).send(result);
         } catch(e) {
+            res.status(400).send({error:e.message});
+        }
+    }
+    getPetsForUserByName = async (req, res) => {
+        try {
+            const result = await user_service.getPetsForUserByName(req);
+            res.status(201).send(result);
+        } catch (e) {
             res.status(400).send({error:e.message});
         }
     }

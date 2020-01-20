@@ -11,8 +11,10 @@ mongoose.connect('mongodb://localhost:27017/usersdb', {
 });
 
 app.use(express.json());
+app.use('/', router.registrationRouter);
 app.use('/', router.userRouter);
 app.use('/', router.petRouter);
+
 app.listen(3000, function () {
   console.log('app listening on port 3000');
 });

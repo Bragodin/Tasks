@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Registration</title>
+</head>
+<body>
+    <h2>Add User</h2>
+    <form action="" method="post">
+        <input type="text" id="name" value="">
+        <input type="text" id="surname" value="">
+        <input type="text" id="login" value="">
+        <button type="submit" onclick="sendData()">send</button>
+    </form>
+    <script>
+        function sendData(){
+            let userName = document.getElementById('name').value;
+            let userSurname = document.getElementById('surname').value;
+            let userLogin = document.getElementById('login').value;
+            let user = {
+                name: userName,
+                surname: userSurname,
+                login: userLogin
+            };
+            console.log(JSON.stringify(user))
+            let response = await fetch('http://localhost:3000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(user)
+            });
+            let text = await response.text(); 
+            console.log(user);
+            let result = await response.json();
+            alert(result.message);
+        }
+
+    </script>
+</body>
+</html>

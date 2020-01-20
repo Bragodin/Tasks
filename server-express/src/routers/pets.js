@@ -9,6 +9,5 @@ router.get('/pets/:id', pet_controller.getPetById);
 router.put('/pets/:id', pet_controller.updatePet);
 router.delete('/pets/:id', pet_controller.deletePet);
 
-
 module.exports = router;
 

@@ -6,6 +6,10 @@ const petScheme = new mongoose.Schema({
         type: String,
         required: true
     },
+    kind: {
+        type: String,
+        required: false
+    },
     ownerId: {
         type: Schema.Types.ObjectId,
         ref: "User",
