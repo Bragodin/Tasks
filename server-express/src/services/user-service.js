@@ -6,6 +6,7 @@ class UserService {
         this.getUsers();
         this.arrUsers;
         this.userById;
+        this.activeToken;
     }
     getUsers = async () => {
         return await User.find({});
@@ -21,29 +22,42 @@ class UserService {
         try {
             return await User.aggregate([
                 {
-                $lookup: {
-                    from: "pets",
-                    localField: '_id' ,
-                    foreignField: "ownerId",
-                    as: "pets"
-                 }
+                    $match: {_id: mongoose.Types.ObjectId(req.params.id)}
                 },
                 {
-                    $match: {_id: mongoose.Types.ObjectId(req.params.id)}
+                    $lookup: {
+                        from: "pets",
+                        localField: '_id' ,
+                        foreignField: "ownerId",
+                        as: "pets"
+                    }
                 }
             ]);
         } catch(e) {
             console.log(e);
         }
     }
-    addUser = async (body) => {
+    addUser = async (req) => {
         try {
-            const user = new User(body);
+            const user = new User(req.body);
             await user.save();
-            return user;
+            const token = await user.generateAuthToken();
+            this.activeToken = token;
+            return { user, token }  
         } catch(e){
             console.log(e);
         }
+    }
+    login = async (req) => {
+        const user = await User.findByCredentials(req.body.login, req.body.password);
+        const token = await user.generateAuthToken();    
+        return {user, token}
+    }
+    logout = async (req) => {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token;
+        });
+        await req.user.save();
     }
     updateUser = async (id, body) => {
         try {

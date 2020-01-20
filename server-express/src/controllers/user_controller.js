@@ -2,9 +2,25 @@ const UserService = require('../services/user-service');
 const user_service = new UserService();
 class UserController {
     constructor(){}
+    login = async (req, res) => {      
+        try {
+            const result = await user_service.login(req)
+            res.status(201).send(result)
+        } catch (e) {
+            res.status(400).send({error:e.message})
+        }
+    }
+    logout =  async (req, res) => {
+        try {
+            await user_service.logout(req);
+            res.send({responce: "successfully logout"});
+        } catch (e) {
+            res.status(400).send({error:e.message});
+        }
+    }
     addUser = async (req, res) => {
         try {
-            const result = await user_service.addUser(req.body);
+            const result = await user_service.addUser(req);
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send({error:e.message});
