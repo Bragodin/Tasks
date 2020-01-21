@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const mongoose = require('mongoose');
-
+const Pet = require('../models/pet');
 class UserService {
     constructor(){
         this.getUsers();
@@ -68,7 +68,8 @@ class UserService {
     }
     deleteUser = async (req) => {
         try {
-            return await User.findByIdAndDelete(req.params.id);
+            await User.findByIdAndDelete(req.params.id);
+            await Pet.deleteMany({ownerId: req.params.id});
         } catch(e){
             console.log(e);
         }

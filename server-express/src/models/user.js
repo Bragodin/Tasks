@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Pet = require('../models/pet');
 
 const userScheme = new mongoose.Schema({
     name: {
@@ -61,13 +60,6 @@ userScheme.pre('save', async function(next){
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8);
     }
-    next();
-});
-
-userScheme.pre('findByIdAndDelete', async function(next) {
-    const user = this;
-    console.log('input in pre');
-    // await Pet.findOneAndDelete({ownerId: user._id});
     next();
 });
 

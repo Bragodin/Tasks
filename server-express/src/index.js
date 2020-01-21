@@ -9,7 +9,7 @@ mongoose.connect('mongodb://localhost:27017/usersdb', {
   useFindAndModify: false,
   useUnifiedTopology: true
 });
-
+app.use(express.static('public'));
 app.use(express.json());
 app.use('/', router.userRouter);
 app.use('/', router.petRouter);
