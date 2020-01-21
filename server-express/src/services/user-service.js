@@ -9,11 +9,11 @@ class UserService {
         this.activeToken;
     }
     getUsers = async () => {
-        return await User.find({});
+        return await User.find({}).select('-tokens');
     }
     getUserById = async function(req) {
         try {
-            return await User.findById(req.params.id)
+            return await User.findById(req.params.id).select('-tokens');
         } catch(e){
             console.log(e);
         }

@@ -4,10 +4,10 @@ class UserController {
     constructor(){}
     login = async (req, res) => {      
         try {
-            const result = await user_service.login(req)
-            res.status(201).send(result)
+            const result = await user_service.login(req);
+            res.status(201).send(result);
         } catch (e) {
-            res.status(400).send({error:e.message})
+            res.status(400).send({error:e.message});
         }
     }
     logout =  async (req, res) => {

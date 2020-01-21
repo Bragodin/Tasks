@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Pet = require('../models/pet');
+
 const userScheme = new mongoose.Schema({
     name: {
         type: String,
@@ -45,13 +47,13 @@ userScheme.methods.generateAuthToken = async function () {
 userScheme.statics.findByCredentials = async (login, password) => {
     const user = await User.findOne({ login })
     if(!user) {
-        throw new Error('Unable user')
+        throw new Error('Unable user');
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-        throw new Error('Unable to login')
+        throw new Error('Unable to login');
     }
-    return user
+    return user;
 }
 
 userScheme.pre('save', async function(next){
@@ -61,17 +63,13 @@ userScheme.pre('save', async function(next){
     }
     next();
 });
-// userSchema.pre('remove', async function(next) {
-//     const user = this
-//     await League.update(
-//        {users: user._id},
-//        {$pull: {users: user._id} },
-//        {multi: true})
-//     .exec();
-//     await Race.remove({user: user._id}).exec();
-//     next();
-// })
 
+userScheme.pre('findByIdAndDelete', async function(next) {
+    const user = this;
+    console.log('input in pre');
+    // await Pet.findOneAndDelete({ownerId: user._id});
+    next();
+});
 
 const User = mongoose.model("User", userScheme);
 
