@@ -27,6 +27,10 @@ const userScheme = new mongoose.Schema({
             }
         }
     },
+    phone: {
+        type: String,
+        required: true
+    },
     tokens: [{
         token: {
             type: String,
