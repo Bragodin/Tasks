@@ -2,12 +2,7 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 const Pet = require('../models/pet');
 class UserService {
-    constructor(){
-        this.getUsers();
-        this.arrUsers;
-        this.userById;
-        this.activeToken;
-    }
+    constructor(){}
     getUsers = async () => {
         return await User.find({}).select('-tokens');
     }

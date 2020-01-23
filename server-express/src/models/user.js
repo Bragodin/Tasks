@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
 const userScheme = new mongoose.Schema({
     name: {
         type: String,
@@ -19,13 +18,7 @@ const userScheme = new mongoose.Schema({
     password: {
         type: String,
         required: true, 
-        minlength: 7,
         trim: true,
-        validate(value) {
-            if (value.toLowerCase().includes('password')) {
-                throw new Error('Password cannot contain "password"')
-            }
-        }
     },
     phone: {
         type: String,
@@ -38,7 +31,6 @@ const userScheme = new mongoose.Schema({
         }
     }],
 });
-
 userScheme.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({_id: user._id.toString() }, 'expressapp');
@@ -46,9 +38,8 @@ userScheme.methods.generateAuthToken = async function () {
     user.save();
     return token;
 }
-
 userScheme.statics.findByCredentials = async (login, password) => {
-    const user = await User.findOne({ login })
+    const user = await User.findOne({login});
     if(!user) {
         throw new Error('Unable user');
     }
@@ -58,7 +49,6 @@ userScheme.statics.findByCredentials = async (login, password) => {
     }
     return user;
 }
-
 userScheme.pre('save', async function(next){
     const user = this;
     if(user.isModified('password')){
@@ -66,7 +56,6 @@ userScheme.pre('save', async function(next){
     }
     next();
 });
-
 const User = mongoose.model("User", userScheme);
 
 module.exports = User;

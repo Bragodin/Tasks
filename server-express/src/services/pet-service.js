@@ -1,11 +1,6 @@
 const Pet = require('../models/pet');
-
 class PetService {
-    constructor(){
-        this.getPets();
-        this.arrPets;
-        this.PetById;
-    }
+    constructor(){}
     getPets = async () => {
         return await Pet.find({});
     }
@@ -38,10 +33,9 @@ class PetService {
     deletePet = async (req) => {
         try {
             return await Pet.findByIdAndDelete(req.params.id);
-        } catch(e){
+        } catch(e) {
             console.log(e);
         }
     }
 }
-
 module.exports = PetService;

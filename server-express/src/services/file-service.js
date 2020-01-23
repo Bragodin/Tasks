@@ -1,3 +1,5 @@
+const path = require('path');
+
 class FileService {
     constructor(){
     }
@@ -8,11 +10,11 @@ class FileService {
             res.send(400);
         }
     }
-    getAllUploads = async (req, res) => {
+    getFileByName = async (req, res) => {
         try {
-
-        } catch (e){
-            
+            res.sendFile(path.join(__dirname + './../../public/uploads/' + req.params.fileName));
+        } catch (err) {
+            res.send(400);
         }
     }
 }
