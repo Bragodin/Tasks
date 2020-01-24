@@ -24,6 +24,7 @@ const userScheme = new mongoose.Schema({
         type: String,
         required: true
     },
+ 
     tokens: [{
         token: {
             type: String,
@@ -34,8 +35,7 @@ const userScheme = new mongoose.Schema({
 userScheme.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({_id: user._id.toString() }, 'expressapp');
-    user.tokens = user.tokens.concat({ token });
-    user.save();
+     user.save();
     return token;
 }
 userScheme.statics.findByCredentials = async (login, password) => {
@@ -51,6 +51,7 @@ userScheme.statics.findByCredentials = async (login, password) => {
 }
 userScheme.pre('save', async function(next){
     const user = this;
+     
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8);
     }

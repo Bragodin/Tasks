@@ -1,6 +1,5 @@
 const express = require('express');
 const router = new express.Router();
-const path = require('path');
 const FileController = require('../controllers/file_controller');
 const file_controller = new FileController();
 const upload = require('../middleware/get_user_file');

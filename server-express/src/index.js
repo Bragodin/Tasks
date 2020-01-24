@@ -2,18 +2,22 @@ const express = require('express');
 const app = express();
 const router = require('./routers/export-router');
 const mongoose = require('mongoose');
+require('dotenv').config({ path: 'config/build.env'});
 
-mongoose.connect('mongodb://localhost:27017/usersdb', {
+mongoose.connect(process.env.MONGO_DB, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true
 });
+
+const port = process.env.PORT || 8080;
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use('/', router.userRouter);
 app.use('/', router.petRouter);
 app.use('/', router.fileRouter);
-app.listen(3000, function () {
-  console.log('app listening on port 3000');
+app.listen(port, function () {
+  console.log(`app listening on port ${port}`);
 });

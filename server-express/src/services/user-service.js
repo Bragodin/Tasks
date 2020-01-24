@@ -46,7 +46,7 @@ class UserService {
     login = async (req) => {
         const user = await User.findByCredentials(req.body.login, req.body.password);
         const token = await user.generateAuthToken();    
-        return {user, token}
+        return { user, token }
     }
     logout = async (req) => {
         req.user.tokens = req.user.tokens.filter((token) => {

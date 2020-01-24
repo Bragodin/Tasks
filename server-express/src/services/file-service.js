@@ -7,14 +7,14 @@ class FileService {
         try {
             res.send(req.files);
         } catch(e) {
-            res.send(400);
+            console.log(e);
         }
     }
     getFileByName = async (req, res) => {
         try {
             res.sendFile(path.join(__dirname + './../../public/uploads/' + req.params.fileName));
-        } catch (err) {
-            res.send(400);
+        } catch (e) {
+            console.log(e);
         }
     }
 }
