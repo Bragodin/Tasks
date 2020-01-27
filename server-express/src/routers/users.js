@@ -5,9 +5,10 @@ const UserController = require('../controllers/user_controller');
 const user_controller = new UserController();
 const userSchema = require('../middleware/user_validation_scheme');
 const validation = require('../middleware/validation');
+const upload = require('../middleware/get_user_file');
 
 router.get('/users', user_controller.getUsers);
-router.post('/users', validation(userSchema), user_controller.addUser);
+router.post('/users', upload.single('profile'), validation(userSchema), user_controller.addUser(upload.originalname));
 router.get('/users/:id', user_controller.getUserById);
 router.put('/users/:id', user_controller.updateUser);  
 router.delete('/users/:id', user_controller.deleteUser);

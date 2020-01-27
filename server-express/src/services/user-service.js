@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const Pet = require('../models/pet');
+const path = require('path');
 class UserService {
     constructor(){}
     getUsers = async () => {
@@ -32,12 +33,12 @@ class UserService {
             console.log(e);
         }
     }
-    addUser = async (req) => {
+    addUser = async (req, photo) => {
         try {
             const user = new User(req.body);
+            user.photo = path.join(__dirname + './../../public/uploads/' + photo)
             await user.save();
             const token = await user.generateAuthToken();
-            this.activeToken = token;
             return { user, token }  
         } catch(e){
             console.log(e);

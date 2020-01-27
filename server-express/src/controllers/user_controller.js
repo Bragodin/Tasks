@@ -18,13 +18,15 @@ class UserController {
             res.status(400).send({error:e.message});
         }
     }
-    addUser = async (req, res) => {
+    addUser = (photo) => {
+    return async (req, res) => {
         try {
-            const result = await user_service.addUser(req);
+            const result = await user_service.addUser(req, photo);
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send({error:e.message});
         }
+    }
     }
     getUserPetsById = async (req, res) => {
         try {
