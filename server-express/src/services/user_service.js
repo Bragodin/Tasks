@@ -4,11 +4,13 @@ const Pet = require('../models/pet');
 class UserService {
     constructor(){}
     getUsers = async () => {
-        return await User.find({}).select('-tokens');
+        return await User.find({})
+        // .select('-tokens');
     }
     getUserById = async function(req) {
         try {
-            return await User.findById(req.params.id).select('-tokens');
+            return await User.findById(req.params.id)
+            // .select('-tokens');
         } catch(e){
             console.log(e);
         }
@@ -44,8 +46,9 @@ class UserService {
         }
     }
     login = async (req) => {
+        console.log(req.body)
         const user = await User.findByCredentials(req.body.login, req.body.password);
-        const token = await user.generateAuthToken();    
+        const token = await user.generateAuthToken(); 
         return { user, token }
     }
     logout = async (req) => {
@@ -56,7 +59,9 @@ class UserService {
     }
     updateUser = async (id, body) => {
         try {
-            return await User.findByIdAndUpdate(id, body);
+            console.log('UPPDATE')
+            return await User.findOneAndUpdate({ _id: id }, body);
+            // return await User.findByIdAndUpdate(id, body);
         } catch(e) {
             console.log(e);
         }
@@ -65,6 +70,13 @@ class UserService {
         try {
             await User.findByIdAndDelete(req.params.id);
             await Pet.deleteMany({ownerId: req.params.id});
+        } catch(e){
+            console.log(e);
+        }
+    }
+    getUsersByName = async (nameLetter) => {
+        try {
+            return await User.find({ name: {$regex: `^${nameLetter}\.*`, $options: 'i'}});
         } catch(e){
             console.log(e);
         }

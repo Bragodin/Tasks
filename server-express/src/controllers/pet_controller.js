@@ -1,4 +1,4 @@
-const PetService = require('../services/Pet-service');
+const PetService = require('../services/pet_service');
 const pet_service = new PetService();
 class PetController {
     constructor(){}
