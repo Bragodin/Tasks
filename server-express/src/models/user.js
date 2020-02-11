@@ -52,11 +52,14 @@ userScheme.statics.findByCredentials = async (login, password) => {
     }
     return user;
 }
+
 // userScheme.pre('findOneAndUpdate', async function(next){
-//     const user = this;
+//     const user = await User.findById('5e40fc81e595271b30c9a158');  
+//     console.log(user.password + 'UUUUUUUUUUUUUUUUUUUU')
 //     if(user.password.length > 0){
 //         user.password = await bcrypt.hash(user.password, 8);   
 //     }
+//     console.log(user.password)
 //     next();
 // });
 

@@ -21,6 +21,7 @@ app.use(express.json());
 app.use('/', router.userRouter);
 app.use('/', router.petRouter);
 app.use('/', router.fileRouter);
+app.use('/', router.albumRouter);
 app.listen(port, function () {
   console.log(`app listening on port ${port}`);
 });

@@ -5,9 +5,9 @@ const photoScheme = new mongoose.Schema({
         type: String,
         required: true
     },
-    ownerId: {
+    albumId: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Album",
         required: true
     }
 });

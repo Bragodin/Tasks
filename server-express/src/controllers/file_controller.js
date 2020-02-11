@@ -1,4 +1,4 @@
-const FileService = require('../services/file-service');
+const FileService = require('../services/file_service');
 const file_service = new FileService();
 class FileController {
     constructor(){}

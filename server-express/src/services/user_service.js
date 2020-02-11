@@ -1,10 +1,12 @@
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const Pet = require('../models/pet');
+const bcrypt = require('bcryptjs');
+
 class UserService {
     constructor(){}
     getUsers = async () => {
-        return await User.find({})
+        return await User.find({});
         // .select('-tokens');
     }
     getUserById = async function(req) {
@@ -46,7 +48,6 @@ class UserService {
         }
     }
     login = async (req) => {
-        console.log(req.body)
         const user = await User.findByCredentials(req.body.login, req.body.password);
         const token = await user.generateAuthToken(); 
         return { user, token }
@@ -59,9 +60,10 @@ class UserService {
     }
     updateUser = async (id, body) => {
         try {
-            console.log('UPPDATE')
+            if(body.password.length > 0){
+                body.password = await bcrypt.hash(body.password, 8);   
+            }
             return await User.findOneAndUpdate({ _id: id }, body);
-            // return await User.findByIdAndUpdate(id, body);
         } catch(e) {
             console.log(e);
         }
