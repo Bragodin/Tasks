@@ -20,7 +20,7 @@ class AlbumController {
     }
     uppdateAlbum = async (req, res) => {
         try {
-            const result = await album_service.uppdateAlbum(req.params.id, req.body);
+            const result = await album_service.uppdateAlbum(req.params.id, req);
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send({error:e.message});
@@ -28,7 +28,15 @@ class AlbumController {
     }
     deleteAlbum = async (req, res) => {
         try {
-            const result = await album_service.deleteAlbum(req.params.albumId);
+            const result = await album_service.deleteAlbum(req);
+            res.status(201).send(result);
+        } catch (e) {
+            res.status(400).send({error:e.message});
+        }
+    }
+    addAlbum = async (req, res) => {
+        try {
+            const result = await album_service.addAlbum(req);
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send({error:e.message});

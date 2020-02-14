@@ -6,8 +6,9 @@ const auth = require('../middleware/auth');
 
 router.get('/albums', auth, album_controller.getAlbums);          
 router.put('/album/:id', auth, album_controller.uppdateAlbum);
+router.post('/album/add', auth, album_controller.addAlbum);
 router.get('/album/:userId', auth, album_controller.getAlbumsByUserId);  
-router.delete('/album/:albumId', album_controller.deleteAlbum);
+router.delete('/album/:albumId', auth, album_controller.deleteAlbum);
 
 module.exports = router;
 

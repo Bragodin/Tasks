@@ -13,23 +13,40 @@ class AlbumService {
     }
     getAlbumsByUserId = async (owner) => {
         try {
-
             return await Album.find({ userId: owner });
         } catch (e) {
             console.log(e);
         }
     }
-    uppdateAlbum = async (id, album) => {
+    uppdateAlbum = async (id, req) => {
         try {
-            return await Album.findOneAndUpdate({ _id: id }, album);
+            if(req.user.id === req.body.userId){
+                return await Album.findOneAndUpdate({ _id: id }, req.body);
+            }
         } catch (e) {
             console.log(e);
         }
     }
-    deleteAlbum = async (id) => {
+    addAlbum = async (req) => {
+        try {
+            console.log('ALBOM THERE ARE')
+            console.log(req.body)
+            const album = new Album(req.body);
+            await album.save();
+            return album;  
+        } catch(e){
+            console.log(e);
+        } 
+    }
+    deleteAlbum = async (req) => {
         try {
             // await Pet.deleteMany({ownerId: req.params.id});
-            return await Album.findByIdAndDelete(id);
+            console.log('DELETE ALBUm')
+            console.log(req.user.id)
+            console.log(req.body)
+            // if(req.user.id === req.body.userId){
+                return await Album.findByIdAndDelete(req.params.albumId);
+            // }
         } catch(e){
             console.log(e);
         } 

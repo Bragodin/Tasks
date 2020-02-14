@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Friends = require('../models/friends');
 const mongoose = require('mongoose');
 const Pet = require('../models/pet');
 const bcrypt = require('bcryptjs');
@@ -36,6 +37,25 @@ class UserService {
             console.log(e);
         }
     }
+    getUserFriendsById = async (req) => {
+        try {
+            return await User.aggregate([
+                {
+                    $match: {_id: mongoose.Types.ObjectId(req.params.id)}
+                },
+                {
+                    $lookup: {
+                        from: "friends",
+                        localField: '_id' ,
+                        foreignField: "ownerId",
+                        as: "friends"
+                    }
+                }
+            ]);
+        } catch(e) {
+            console.log(e);
+        }
+    }
     addUser = async (req) => {
         try {
             const user = new User(req.body);
@@ -58,12 +78,12 @@ class UserService {
         });
         await req.user.save();
     }
-    updateUser = async (id, body) => {
+    updateUser = async (id, req) => {
         try {
-            if(body.password.length > 0){
-                body.password = await bcrypt.hash(body.password, 8);   
+            if(req.body.password && req.body.password.length > 0){
+                req.body.password = await bcrypt.hash(req.body.password, 8);   
             }
-            return await User.findOneAndUpdate({ _id: id }, body);
+            return await User.findOneAndUpdate({ _id: req.user.id }, req.body);
         } catch(e) {
             console.log(e);
         }
@@ -72,7 +92,7 @@ class UserService {
         try {
             await User.findByIdAndDelete(req.params.id);
             await Pet.deleteMany({ownerId: req.params.id});
-        } catch(e){
+        } catch(e) {
             console.log(e);
         }
     }

@@ -10,20 +10,14 @@ const albumScheme = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    date: {
-        type: String,
-        required: true
-    },
-    numberOfPhotos: {
-        type: Number,
-        required: true
-    },
     photosName: [{
         type: String,
         required: true
     }]
-});
-
+    }, 
+    { 
+        timestamps: { createdAt: 'created_at' } 
+    });
 const Album = mongoose.model("Album", albumScheme);
 
 module.exports = Album;
