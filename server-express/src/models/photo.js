@@ -5,11 +5,22 @@ const photoScheme = new mongoose.Schema({
         type: String,
         required: true
     },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    }, 
     albumId: {
         type: Schema.Types.ObjectId,
         ref: "Album",
         required: true
-    }
+    }, 
+    likes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
 });
 const Photo = mongoose.model("Photo", photoScheme);
 

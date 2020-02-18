@@ -1,5 +1,6 @@
 const path = require('path');
 const Album = require('../models/album');
+const mongoose = require('mongoose');
 
 class AlbumService {
     constructor(){
@@ -13,7 +14,20 @@ class AlbumService {
     }
     getAlbumsByUserId = async (owner) => {
         try {
-            return await Album.find({ userId: owner });
+            return await Album.aggregate([
+                {
+                    $match: { userId: mongoose.Types.ObjectId(owner) }
+                },
+                {
+                    $lookup: {
+                        from: "photos",
+                        localField: '_id' ,
+                        foreignField: "albumId",
+                        as: "photosName"
+                    }
+                }
+            ]);
+            // return await Album.find({ userId: owner });
         } catch (e) {
             console.log(e);
         }

@@ -14,7 +14,7 @@ router.delete('/users/:id', user_controller.deleteUser);
 router.get('/users/:id/pets', user_controller.getUserPetsById);
 router.post('/login', user_controller.login);
 router.post('/logout', auth, user_controller.logout);
-router.get('/users/name/:query',  user_controller.getUsersByName);
+router.get('/users/name/:query', auth, user_controller.getUsersByName);
 
 module.exports = router;
 

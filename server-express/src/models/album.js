@@ -10,10 +10,10 @@ const albumScheme = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    photosName: [{
-        type: String,
-        required: true
-    }]
+    // photosName: [{
+    //     type: String,
+    //     required: true
+    // }]
     }, 
     { 
         timestamps: { createdAt: 'created_at' } 

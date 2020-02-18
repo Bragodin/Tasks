@@ -3,9 +3,20 @@ const path = require('path');
 class FileService {
     constructor(){
     }
-    addFile = async (req, res) => {
+    addFiles = async (req, res) => {
         try {
-            res.send(req.files);
+            let result = []
+            req.files.map( data => {
+                let photo = {
+                    name: data.filename,
+                    userId: '',
+                    albumId: '',
+                    likes: []
+                }
+                result.push(photo)
+            });
+            console.log('FILESSSSSSS:')            
+            console.log(result)
         } catch(e) {
             console.log(e);
         }

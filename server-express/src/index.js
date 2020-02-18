@@ -3,9 +3,7 @@ const app = express();
 const router = require('./routers/export-router');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const documents = {};
+
 require('dotenv').config({ path: 'config/build.env'});
 
 mongoose.connect(process.env.MONGO_DB, {
@@ -25,14 +23,9 @@ app.use('/', router.userRouter);
 app.use('/', router.petRouter);
 app.use('/', router.fileRouter);
 app.use('/', router.albumRouter);
-http.listen(4444);
+app.use('/', router.notificationRouter);
 
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
+app.use('/', router.photoRouter);
 
 app.listen(port, function () {
   console.log(`app listening on port ${port}`);
