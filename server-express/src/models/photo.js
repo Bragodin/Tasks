@@ -13,7 +13,6 @@ const photoScheme = new mongoose.Schema({
     albumId: {
         type: Schema.Types.ObjectId,
         ref: "Album",
-        required: true
     }, 
     likes: [
         {

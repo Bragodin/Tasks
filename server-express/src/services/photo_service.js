@@ -1,17 +1,25 @@
 const Photo = require('../models/photo');
 const mongoose = require('mongoose');
+const fs = require("fs");
+const path = require("path");
 
 class PhotoService {
     constructor(){}
-    addPhotoInCollection = async (body) => {
+    deletePhoto = async (req) => {
         try {
-            console.log(JSON.stringify(body))
-            // const pet = new Pet(body);  
-            // await pet.save();
-            // return pet;
-            
-        } catch(e){
+            return await Photo.deleteOne({ name: req.params.image }, (err, data) => {
+                if (err){
+                    console.log(err);
+                } else {
+                    fs.unlink(`public/uploads/${req.params.image}`, (err) => {
+                        if (err) console.log(err);
+                        else console.log(`${req.params.image} was deleted`);
+                    });
+                }
+            });
+        } catch(e) {
             console.log(e);
+            throw e;
         }
     }
 }

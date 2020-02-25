@@ -9,12 +9,10 @@ const notificationsScheme = new mongoose.Schema({
     friendsNotification: [{
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
     }],
     messageNotification: [{
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
     }]
 });
 const Notifications = mongoose.model("Notifications", notificationsScheme);

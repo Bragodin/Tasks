@@ -1,6 +1,7 @@
-const path = require('path');
 const Album = require('../models/album');
 const mongoose = require('mongoose');
+const Photo = require('../models/photo');
+const fs = require('fs');
 
 class AlbumService {
     constructor(){
@@ -10,6 +11,7 @@ class AlbumService {
             return await Album.find({});
         } catch (e) {
             console.log(e);
+            throw e;
         }
     }
     getAlbumsByUserId = async (owner) => {
@@ -39,6 +41,7 @@ class AlbumService {
             }
         } catch (e) {
             console.log(e);
+            throw e;
         }
     }
     addAlbum = async (req) => {
@@ -54,15 +57,26 @@ class AlbumService {
     }
     deleteAlbum = async (req) => {
         try {
-            // await Pet.deleteMany({ownerId: req.params.id});
-            console.log('DELETE ALBUm')
-            console.log(req.user.id)
-            console.log(req.body)
+            let photos = await Photo.find({albumId: req.params.albumId});
+            console.log(photos)
             // if(req.user.id === req.body.userId){
+                await Photo.deleteMany({ albumId: req.params.albumId }, (err, data) => {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        for(let item of photos){
+                            fs.unlink(`public/uploads/${item.name}`, (err) => {
+                                if (err) console.log(err);
+                                else console.log(`${item.name} was deleted`);
+                            });
+                        }
+                    }
+                });
                 return await Album.findByIdAndDelete(req.params.albumId);
             // }
         } catch(e){
             console.log(e);
+            throw e;
         } 
     }
 }

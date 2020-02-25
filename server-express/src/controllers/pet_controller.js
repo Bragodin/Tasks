@@ -10,7 +10,7 @@ class PetController {
             res.status(400).send({error:e.message});
         }
     }
-    deletePet = async (req, res) => {
+    deletePet = async (req, res) => { 
         try {
             console.log(req)
             const result = await pet_service.deletePet(req);

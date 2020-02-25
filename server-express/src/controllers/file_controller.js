@@ -17,5 +17,13 @@ class FileController {
             res.status(400).send({error:e.message});
         }
     }
+    addAvatar = async (req, res) => {
+        try {
+            const result = await file_service.addAvatar(req);
+            res.status(201).send(result);
+        } catch (e) {
+            res.status(400).send({error:e.message});
+        }
+    }
 }
 module.exports = FileController;

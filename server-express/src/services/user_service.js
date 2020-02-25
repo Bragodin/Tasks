@@ -3,6 +3,7 @@ const Friends = require('../models/friends');
 const mongoose = require('mongoose');
 const Pet = require('../models/pet');
 const bcrypt = require('bcryptjs');
+const Notifications = require('../models/notification');
 
 class UserService {
     constructor(){}
@@ -16,6 +17,7 @@ class UserService {
             // .select('-tokens');
         } catch(e){
             console.log(e);
+            throw e;
         }
     }
     getUserPetsById = async (req) => {
@@ -35,6 +37,7 @@ class UserService {
             ]);
         } catch(e) {
             console.log(e);
+            throw e;
         }
     }
     getUserFriendsById = async (req) => {
@@ -54,17 +57,21 @@ class UserService {
             ]);
         } catch(e) {
             console.log(e);
+            throw e;
         }
     }
     addUser = async (req) => {
         try {
             const user = new User(req.body);
             await user.save();
+            const notifications = new Notifications({ownerId: user._id});
+            await notifications.save();
             const token = await user.generateAuthToken();
             this.activeToken = token;
             return { user, token }  
         } catch(e){
             console.log(e);
+            throw e;
         }
     }
     login = async (req) => {
@@ -86,6 +93,7 @@ class UserService {
             return await User.findOneAndUpdate({ _id: req.user.id }, req.body);
         } catch(e) {
             console.log(e);
+            throw e;
         }
     }
     deleteUser = async (req) => {
@@ -94,6 +102,7 @@ class UserService {
             await Pet.deleteMany({ownerId: req.params.id});
         } catch(e) {
             console.log(e);
+            throw e;
         }
     }
     getUsersByName = async (nameLetter) => {
@@ -101,6 +110,7 @@ class UserService {
             return await User.find({ name: {$regex: `^${nameLetter}\.*`, $options: 'i'}});
         } catch(e){
             console.log(e);
+            throw e;
         }
     }
 }

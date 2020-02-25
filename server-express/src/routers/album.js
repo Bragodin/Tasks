@@ -10,5 +10,6 @@ router.post('/album/add', auth, album_controller.addAlbum);
 router.get('/album/:userId', auth, album_controller.getAlbumsByUserId);  
 router.delete('/album/:albumId', auth, album_controller.deleteAlbum);
 
-module.exports = router;
+module.exports = router
+
 

@@ -11,7 +11,7 @@ const auth = require('../middleware/auth');
 
 // router.get('/photos', photo_controller.getPhotos);
 
-router.post('/photos', photo_controller.addPhotoInCollection);
+router.delete('/photo/:image', photo_controller.deletePhoto);
 
 module.exports = router;
 

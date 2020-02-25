@@ -24,8 +24,8 @@ app.use('/', router.petRouter);
 app.use('/', router.fileRouter);
 app.use('/', router.albumRouter);
 app.use('/', router.notificationRouter);
-
 app.use('/', router.photoRouter);
+app.use('/friends', router.friendsRouter);
 
 app.listen(port, function () {
   console.log(`app listening on port ${port}`);
