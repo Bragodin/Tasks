@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const Friends = require('../models/friends');
 const mongoose = require('mongoose');
 const Pet = require('../models/pet');
 const bcrypt = require('bcryptjs');
@@ -13,7 +12,7 @@ class UserService {
     }
     getUserById = async function(req) {
         try {
-            return await User.findById(req.params.id)
+            return await User.findById(req.params.id).select('-password');
             // .select('-tokens');
         } catch(e){
             console.log(e);
@@ -40,26 +39,28 @@ class UserService {
             throw e;
         }
     }
-    getUserFriendsById = async (req) => {
-        try {
-            return await User.aggregate([
-                {
-                    $match: {_id: mongoose.Types.ObjectId(req.params.id)}
-                },
-                {
-                    $lookup: {
-                        from: "friends",
-                        localField: '_id' ,
-                        foreignField: "ownerId",
-                        as: "friends"
-                    }
-                }
-            ]);
-        } catch(e) {
-            console.log(e);
-            throw e;
-        }
-    }
+
+    // getUserFriendsById = async (req) => {
+    //     try {
+    //         return await User.aggregate([
+    //             {
+    //                 $match: {_id: mongoose.Types.ObjectId(req.params.id)}
+    //             },
+    //             {
+    //                 $lookup: {
+    //                     from: "friends",
+    //                     localField: '_id' ,
+    //                     foreignField: "ownerId",
+    //                     as: "friends"
+    //                 }
+    //             }
+    //         ]);
+    //     } catch(e) {
+    //         console.log(e);
+    //         throw e;
+    //     }
+    // }
+
     addUser = async (req) => {
         try {
             const user = new User(req.body);

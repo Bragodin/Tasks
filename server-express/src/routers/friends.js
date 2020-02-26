@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 router.get('/:id', auth, friends_controller.getFriends);
 router.get('/requests/:id', auth, friends_controller.getUsersWithFriendsRequest);
 router.post('/addFriend', auth, friends_controller.addToFriends);
+// router.get('/getFriendds', auth)
 
 module.exports = router;
 

@@ -1,12 +1,41 @@
 const Friends = require('../models/friends');
 const Notification = require('../models/notification');
+const mongoose = require('mongoose');
 
 class FriendsService {
     constructor(){
     }
     getFriends = async (id) => {
         try {
-            return await Friends.find({ $or:[ {'friend1': id}, {'friend2': id}]});
+            // return await Friends.find({ $or:[ {'friend1': id}, {'friend2': id}]});
+            const friends = await Friends.aggregate([
+                {
+                    $match: { $or:[ {'friend1': mongoose.Types.ObjectId(id)}, {'friend2': mongoose.Types.ObjectId(id)}]} 
+                },
+                {
+                    $project: 
+                        { 
+                            friend: {
+                                $cond: { if: { $eq: [ "$friend1", mongoose.Types.ObjectId(id) ] }, 
+                                then: "$friend2", else: "$friend1"
+                                }
+                            }                
+                        }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: 'friend',
+                        foreignField: "_id",
+                        as: "friend"
+                    }
+                },
+                {
+                    $unwind:  "$friend" 
+                }
+            ]);
+            console.log(friends);
+            return friends;
         } catch(e) {
             console.log(e);
             throw e;
@@ -23,9 +52,7 @@ class FriendsService {
     }
     addToFriends = async (friends) =>{
         try {
-            await Notification.updateOne({ownerId: friends.friend1}, { $pull: { friendsNotification: { uid: friends.friend2 }}});
-            console.log('friend1: ' + friends.friend1);
-            console.log('friend2: ' + friends.friend2);
+            await Notification.updateOne({ownerId: friends.friend1}, { $pull: { friendsNotification: { $gte: friends.friend2 }}});
             const friendsToDb = await new Friends(friends);
             return friendsToDb.save();
         } catch(e) {
