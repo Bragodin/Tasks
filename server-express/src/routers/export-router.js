@@ -5,6 +5,8 @@ const albumRouter = require('../routers/album');
 const notificationRouter = require('../routers/notifications');
 const photoRouter = require('../routers/photos');
 const friendsRouter = require('../routers/friends');
+const dialogRouter = require('../routers/dialog');
+const messageRouter = require('../routers/message');
 
 module.exports = {
     userRouter,
@@ -13,5 +15,7 @@ module.exports = {
     albumRouter,
     notificationRouter,
     photoRouter,
-    friendsRouter 
+    friendsRouter,
+    dialogRouter,
+    messageRouter
 } 
