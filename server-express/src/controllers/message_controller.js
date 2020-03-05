@@ -20,4 +20,5 @@ class MessageController {
         }
     }
 }
-module.exports =  MessageController;
+
+module.exports = MessageController;

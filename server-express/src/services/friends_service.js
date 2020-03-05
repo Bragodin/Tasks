@@ -34,7 +34,6 @@ class FriendsService {
                     $unwind:  "$friend" 
                 }
             ]);
-            console.log(friends);
             return friends;
         } catch(e) {
             console.log(e);

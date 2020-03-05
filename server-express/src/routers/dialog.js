@@ -4,7 +4,7 @@ const DialogController = require('../controllers/dialog_controller');
 const dialog_controller = new DialogController();
 
 router.post('/add', dialog_controller.addDialog);
-router.get('/', dialog_controller.getDialogues);
+router.post('/getMyDialog', dialog_controller.getDialog);
 
 module.exports = router;
 

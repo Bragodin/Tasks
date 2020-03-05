@@ -1,9 +1,9 @@
 const Joi = require('@hapi/joi');
 const userSchema = Joi.object({
     name: Joi.string()
-        .pattern(new RegExp('^[A-Z]{1}[a-z]{1,}$')),
+        .pattern(new RegExp('^[a-zA-Z0-9А-Яа-я ]{3,30}$')),
     surname: Joi.string()
-        .pattern(new RegExp('^[A-Z]{1}[a-z]{1,}$')),
+        .pattern(new RegExp('^[a-zA-Z0-9А-Яа-я ]{3,30}$')),
     login: Joi.string()
         .pattern(new RegExp('^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$')),
     password: Joi.string()

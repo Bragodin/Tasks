@@ -1,11 +1,41 @@
 const Dialogues = require('../models/dialog');
+const mongoose = require('mongoose');
 
 class DialogService {
     constructor(){
     }
-    getDialogues = async (req) => {
+    getDialog = async (body) => {
         try {
-            return await Dialogues.find({});
+            return await  Dialogues.aggregate([
+                    {   
+                        $match: 
+                        {$or: [
+                            {$and: [{'users': mongoose.Types.ObjectId(body[0])}, {'users': mongoose.Types.ObjectId(body[1])}]},
+                            {$and: [{'users': mongoose.Types.ObjectId(body[1])}, {'users': mongoose.Types.ObjectId(body[0])}]}
+                        ]}
+                    },
+                    {
+                        $lookup: {
+                            from: "messages",
+                            localField: '_id' ,
+                            foreignField: "dialogId",
+                            as: "messages"
+                        }
+                    }
+            ])
+            // return await Dialogues.agregate(
+            //     {
+            //         $match$: {users: { $all: body }}
+            //     },
+            //     {
+            //         $lookup: {
+            //             from: "messages",
+            //             localField: '_id' ,
+            //             foreignField: "dialogId",
+            //             as: "messages"
+            //         }
+            //     }
+            // )
         } catch(e){
             console.log(e);
             throw e;

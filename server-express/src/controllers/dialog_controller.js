@@ -3,9 +3,9 @@ const dialog_service = new DialogService();
 
 class DialogController {
     constructor(){}
-    getDialogues = async (req, res) => {
+    getDialog = async (req, res) => {
         try {
-            const result = await dialog_service.getDialogues(req);
+            const result = await dialog_service.getDialog(req.body);
             res.send(result);
         } catch (e) {
             res.status(400).send({error:e.message});

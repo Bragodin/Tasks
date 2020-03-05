@@ -6,9 +6,13 @@ const Notifications = require('../models/notification');
 
 class UserService {
     constructor(){}
-    getUsers = async () => {
-        return await User.find({});
-        // .select('-tokens');
+
+    getUsers = async (page) => {
+        if(page && page != 'undefined'){
+            return await User.find({}).skip(++page).limit(5);
+        } else {
+            return await User.find({});
+        }
     }
     getUserById = async function(req) {
         try {
@@ -108,6 +112,10 @@ class UserService {
     }
     getUsersByName = async (nameLetter) => {
         try {
+            if(nameLetter === ''){
+                console.log('name latter smmamsdaksd')
+            }
+            console.log('latter: '+nameLetter)
             return await User.find({ name: {$regex: `^${nameLetter}\.*`, $options: 'i'}});
         } catch(e){
             console.log(e);
