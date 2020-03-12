@@ -9,6 +9,10 @@ const messageScheme = new mongoose.Schema({
     message: {
         type: String,
         required: true
+    },
+    ownerId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 

@@ -22,20 +22,20 @@ io.sockets.on('connection', function (socket) {
     io.sockets.in(data.userid).emit('newFriend');
     // socket.emit('addToFriend', { data: 'add to friend', sockid: socketId });
   });
-  socket.on('sendMessage', function (data) {
-    const message = {
-              dialogId: data.dialogId,
-              message: data.message
-            };
-    message_service.addMessage(message)
-    io.sockets.in(data.userid).emit('showMessage', {msg: data.message});
-    // socket.emit('addToFriend', { data: 'add to friend', sockid: socketId });
+  socket.on('sendMessage', async (data) => {
+    try {
+      const message = {
+        dialogId: data.dialogId,
+        ownerId: data.userid,
+        message: data.message
+      };
+      const result = await message_service.addMessage(message);
+      io.sockets.in(data.userid).emit('showMessage', {msg: result.message});
+    } catch(e){
+      io.sockets.in(data.userid).emit('showMessage', {msg: 'ERROR'});
+    } 
   });
 });
-
-
-
-
 
 //
 require('dotenv').config({ path: 'config/build.env'});

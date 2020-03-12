@@ -27,5 +27,14 @@ class FriendsController {
             res.status(400).send({error:e.message});
         } 
     }
+
+    removeFromFriends = async (req, res) => {
+        try {
+            const result = await friends_service.removeFromFriends(req.query.friend1, req.query.friend2);
+            res.status(201).send(result);
+        } catch (e) {
+            res.status(400).send({error:e.message});
+        } 
+    }
 }
 module.exports = FriendsController;

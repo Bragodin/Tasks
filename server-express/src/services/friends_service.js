@@ -53,7 +53,15 @@ class FriendsService {
         try {
             await Notification.updateOne({ownerId: friends.friend1}, { $pull: { friendsNotification: { $gte: friends.friend2 }}});
             const friendsToDb = await new Friends(friends);
-            return friendsToDb.save();
+            return await friendsToDb.save();            
+        } catch(e) {
+            console.log(e);
+            throw e;
+        }
+    }
+    removeFromFriends = async (friend1, friend2) =>{
+        try {
+            return await Friends.findOneAndDelete({ $or: [{friend1: friend1, friend2: friend2}, {friend1: friend2, friend2: friend1}]});
         } catch(e) {
             console.log(e);
             throw e;

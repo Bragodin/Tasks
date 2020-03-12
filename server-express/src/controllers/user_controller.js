@@ -53,7 +53,7 @@ class UserController {
     }
     getUsers = async (req, res) => {
         try {
-            const result = await user_service.getUsers(req.query.page);
+            const result = await user_service.getUsers(req.query);
             res.send(result);
         } catch (e) {
             res.status(400).send({error:e.message});

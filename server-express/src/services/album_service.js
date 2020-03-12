@@ -74,7 +74,7 @@ class AlbumService {
                 });
                 return await Album.findByIdAndDelete(req.params.albumId);
             // }
-        } catch(e){
+        } catch(e) {
             console.log(e);
             throw e;
         } 

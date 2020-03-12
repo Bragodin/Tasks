@@ -8,11 +8,35 @@ class UserService {
     constructor(){}
 
     getUsers = async (page) => {
-        if(page && page != 'undefined'){
-            return await User.find({}).skip(++page).limit(5);
-        } else {
-            return await User.find({});
-        }
+        const position = (+page.page) * (+page.count) - (+page.count);
+        console.log(position)
+        console.log((+page.count))
+        return await User.aggregate([
+            {
+                "$facet": {
+                    "users": [
+                        { "$match": {}},
+                        { "$skip": position },
+                        { "$limit" : (+page.count) },
+                        { "$unset": ["password", "tokens", "__v"]}
+                    ],
+                    "totalCount": [
+                        { "$count": "count" }
+                    ],
+                }
+            },
+            { $unwind: '$users' },
+            { $unwind: '$totalCount' },
+            { $replaceRoot: { newRoot: { 
+                $mergeObjects: ["$users", { totalCount: "$totalCount.count"}] }} 
+            }
+        ]);
+        // if(page && page !== 'undefined'){
+        //     console.log(page)
+        //     return await User.find({}).skip(+page.page).limit(+page.count);
+        // } else {
+        //     return await User.find({});
+        // }
     }
     getUserById = async function(req) {
         try {
@@ -112,10 +136,6 @@ class UserService {
     }
     getUsersByName = async (nameLetter) => {
         try {
-            if(nameLetter === ''){
-                console.log('name latter smmamsdaksd')
-            }
-            console.log('latter: '+nameLetter)
             return await User.find({ name: {$regex: `^${nameLetter}\.*`, $options: 'i'}});
         } catch(e){
             console.log(e);

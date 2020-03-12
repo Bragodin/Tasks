@@ -6,7 +6,8 @@ class NotificationsService {
     }
     getNotifications = async (id) => {
         try {
-            return await Notification.find({ ownerId: id});
+            const notifications = await Notification.findOne({ownerId: id}).populate('friendsNotification').exec();
+            return await notifications.friendsNotification;
         } catch(e) {
             console.log(e);
             throw e;

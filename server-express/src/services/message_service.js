@@ -5,7 +5,7 @@ class MessageService {
     }
     getDialogues = async (req) => {
         try {
-            return await  Messages.find({});
+            return await Messages.find({});
         } catch(e){
             console.log(e);
             throw e;
@@ -13,10 +13,8 @@ class MessageService {
     }
     addMessage = async (body) => {
         try {
-            console.log(body);
             const message = new Messages(body);
-            await message.save(body);
-            return message;  
+            return await message.save(body);
         } catch(e){
             console.log(e);
             throw e;
