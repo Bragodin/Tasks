@@ -17,13 +17,7 @@ class FileService {
                 }
                 result.push(photo);
             });
-            return await Photo.insertMany(result, (err, fises) => {
-                if (err){ 
-                    return console.error(err);
-                } else {
-                    console.log("Files inserted to Collection");
-                }
-            });
+            return await Photo.insertMany(result);
         } catch(e) {
             console.log(e);
             throw e;

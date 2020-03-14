@@ -10,7 +10,7 @@ class FriendsService {
             // return await Friends.find({ $or:[ {'friend1': id}, {'friend2': id}]});
             const friends = await Friends.aggregate([
                 {
-                    $match: { $or:[ {'friend1': mongoose.Types.ObjectId(id)}, {'friend2': mongoose.Types.ObjectId(id)}]} 
+                    $match: { $or:[ {'friend1': mongoose.Types.ObjectId(id)}, {'friend2': mongoose.Types.ObjectId(id)}]}, 
                 },
                 {
                     $project: 
@@ -32,7 +32,7 @@ class FriendsService {
                 },
                 {
                     $unwind:  "$friend" 
-                }
+                },
             ]);
             return friends;
         } catch(e) {

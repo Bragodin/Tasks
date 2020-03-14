@@ -40,7 +40,7 @@ class UserService {
     }
     getUserById = async function(req) {
         try {
-            return await User.findById(req.params.id).select('-password');
+            return await User.findById(req.params.id).select('-password').select('-tokens');
             // .select('-tokens');
         } catch(e){
             console.log(e);

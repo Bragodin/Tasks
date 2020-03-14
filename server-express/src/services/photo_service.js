@@ -7,16 +7,25 @@ class PhotoService {
     constructor(){}
     deletePhoto = async (req) => {
         try {
-            return await Photo.deleteOne({ name: req.params.image }, (err, data) => {
+            const res = await Photo.deleteOne({ name: req.params.image }, (err, data) => {
                 if (err){
                     console.log(err);
                 } else {
-                    fs.unlink(`public/uploads/${req.params.image}`, (err) => {
-                        if (err) console.log(err);
-                        else console.log(`${req.params.image} was deleted`);
+                    return fs.unlink(`public/uploads/${req.params.image}`, (err) => {
+                        if (err) { 
+                            console.log(err);
+                            return err;
+                        }
+                        else {
+                            console.log(`${req.params.image} was deleted`);
+                            return data;
+                        }
                     });
                 }
             });
+            if(res){
+                return req.params.image;
+            }
         } catch(e) {
             console.log(e);
             throw e;

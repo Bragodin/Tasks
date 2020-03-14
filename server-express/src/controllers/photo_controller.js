@@ -6,7 +6,7 @@ class PhotoController {
     deletePhoto = async (req, res) => { 
         try {
             const result = await photo_service.deletePhoto(req);
-            res.status(201).send(result);
+            res.status(201).send({photo: result});
         } catch (e) {
             res.status(400).send({error:e.message});
         }
