@@ -9,8 +9,6 @@ class UserService {
 
     getUsers = async (page) => {
         const position = (+page.page) * (+page.count) - (+page.count);
-        console.log(position)
-        console.log((+page.count))
         return await User.aggregate([
             {
                 "$facet": {
@@ -127,8 +125,9 @@ class UserService {
     }
     deleteUser = async (req) => {
         try {
-            await User.findByIdAndDelete(req.params.id);
             await Pet.deleteMany({ownerId: req.params.id});
+            await Notifications.deleteMany({ownerId: req.params.id});
+            return await User.findByIdAndDelete(req.params.id);
         } catch(e) {
             console.log(e);
             throw e;

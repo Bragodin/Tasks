@@ -17,4 +17,3 @@ router.post('/logout', auth, user_controller.logout);
 router.get('/users/name/:query', auth, user_controller.getUsersByName);
 
 module.exports = router;
-

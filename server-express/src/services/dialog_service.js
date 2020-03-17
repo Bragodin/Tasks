@@ -6,7 +6,7 @@ class DialogService {
     }
     getDialog = async (body) => {
         try {
-            return await  Dialogues.aggregate([
+            return await Dialogues.aggregate([
                     {   
                         $match: 
                         {$or: [

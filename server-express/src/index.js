@@ -6,6 +6,8 @@ const cors = require('cors');
 ///
 const MessageService = require('./services/message_service');
 const message_service = new MessageService();
+const NotificationsService = require('./services/notifications_service');
+const notificationsService = new NotificationsService();
 //sockets
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -27,9 +29,13 @@ io.sockets.on('connection', function (socket) {
       const message = {
         dialogId: data.dialogId,
         ownerId: data.userid,
-        message: data.message
+        message: data.message,
+        recipient: data.userid
       };
+      console.log('MESSAGE')
+      console.log(message)
       const result = await message_service.addMessage(message);
+      await notificationsService.addMessageNotification(message);
       io.sockets.in(data.userid).emit('showMessage', {msg: result.message});
     } catch(e){
       io.sockets.in(data.userid).emit('showMessage', {msg: 'ERROR'});

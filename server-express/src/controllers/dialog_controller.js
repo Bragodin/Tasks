@@ -13,8 +13,6 @@ class DialogController {
     }
     addDialog = async (req, res) => {
         try {
-            console.log('add dialog contr')
-            console.log(req.body)
             const result = await dialog_service.addDialog(req.body);
             res.send(result);
         } catch (e) {
