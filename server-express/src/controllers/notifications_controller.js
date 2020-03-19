@@ -18,5 +18,13 @@ class NotificationsController {
             res.status(400).send({error:e.message});
         }
     }
+    removeMessageNotification = async (req, res) => {
+        try {
+            const result = await notifications_service.removeMessageNotification(req);
+            res.status(201).send(result);
+        } catch (e) {
+            res.status(400).send({error:e.message});
+        }
+    }
 }
 module.exports = NotificationsController;

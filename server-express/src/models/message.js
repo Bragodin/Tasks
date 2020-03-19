@@ -13,10 +13,15 @@ const messageScheme = new mongoose.Schema({
     ownerId: {
         type: Schema.Types.ObjectId,
         ref: "User"
-    }},
+    },
+    // recipient: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "User"
+    // }},
+    },
     { 
         timestamps: { createdAt: 'created_at' } 
-    }
+    }, 
 );
 
 const Messages = mongoose.model("Messages", messageScheme);

@@ -28,15 +28,16 @@ io.sockets.on('connection', function (socket) {
     try {
       const message = {
         dialogId: data.dialogId,
-        ownerId: data.userid,
+        ownerId: data.myid,
         message: data.message,
         recipient: data.userid
       };
-      console.log('MESSAGE')
       console.log(message)
       const result = await message_service.addMessage(message);
       await notificationsService.addMessageNotification(message);
-      io.sockets.in(data.userid).emit('showMessage', {msg: result.message});
+      // console.log('RESULT')
+      // console.log(result)
+      io.sockets.in(data.userid).emit('showMessage', {msg: result.message, recipient: data.myid});
     } catch(e){
       io.sockets.in(data.userid).emit('showMessage', {msg: 'ERROR'});
     } 
