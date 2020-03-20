@@ -16,8 +16,24 @@ class NotificationsService {
     }
     removeMessageNotification = async (req) => {
         try {
-            return await Notification.updateOne({ownerId: req.params.userid}, { $pull: { messageNotification: { $gte: req.body.userId }}});
+            const res = await Notification.updateOne({ownerId: req.params.userid}, { $pull: { messageNotification: { $gte: req.body.userId }}});
         } catch(e) {
+            console.log(e);
+            throw e;
+        }
+    }
+
+    removeFriendNotification = async (req) => {
+        try {  
+            const res = await Notification.updateOne({ownerId: req.params.userid}, { $pull: { friendsNotification: { $gte: req.body.userId }}}, (err, data) => {
+                if(data){
+                    return data;
+                } 
+            });
+            if(res){
+                return {friendRequestId: req.body.userId};
+            }
+        } catch(e){
             console.log(e);
             throw e;
         }
