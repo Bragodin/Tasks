@@ -22,7 +22,6 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on('addToFriend', function (data) {
     io.sockets.in(data.userid).emit('newFriend');
-    // socket.emit('addToFriend', { data: 'add to friend', sockid: socketId });
   });
   socket.on('sendMessage', async (data) => {
     try {
@@ -35,8 +34,7 @@ io.sockets.on('connection', function (socket) {
       console.log(message)
       const result = await message_service.addMessage(message);
       await notificationsService.addMessageNotification(message);
-      // console.log('RESULT')
-      // console.log(result)
+
       io.sockets.in(data.userid).emit('showMessage', {msg: result.message, recipient: data.myid});
     } catch(e){
       io.sockets.in(data.userid).emit('showMessage', {msg: 'ERROR'});
@@ -64,7 +62,7 @@ app.use('/', router.userRouter);
 app.use('/', router.petRouter);
 app.use('/', router.fileRouter);
 app.use('/', router.albumRouter);
-app.use('/', router.notificationRouter);
+app.use('/notifications', router.notificationRouter);
 app.use('/', router.photoRouter);
 app.use('/friends', router.friendsRouter);
 app.use('/dialog', router.dialogRouter);
